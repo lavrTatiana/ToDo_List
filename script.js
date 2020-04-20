@@ -21,11 +21,13 @@ const dataUpdateToLocalS = function() {
 const itemRemove = function(elem) {
   const item = elem.parentNode.parentNode,
         itemParent = item.parentNode,
-        id = itemParent.id,
-        text = item.textContent;
+        text = item.querySelector('span').textContent;
+
+  todoData.splice(todoData.indexOf(text), 1);
   
+  dataUpdateToLocalS();
   itemParent.removeChild(item);  
-  // dataUpdateToLocalS();    
+    
 };
 
 const render = function() {
@@ -65,7 +67,7 @@ const render = function() {
       btnTodoRemove.addEventListener('click', function(event){
         itemRemove(event.target);
         item.value = '';
-        dataUpdateToLocalS();
+        
       });
 
     }
@@ -87,9 +89,10 @@ todoControl.addEventListener('submit', function(event) {
     todoData.push(newTodo);
     headerInput.value = '';
   }
-
-  render();
+  
   dataUpdateToLocalS();
+  render();
+  
 });
 
 render();
