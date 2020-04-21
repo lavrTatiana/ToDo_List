@@ -6,22 +6,11 @@ const todoControl = document.querySelector('.todo-control'),
       todoCompleted = document.querySelector('.todo-completed');
 
 let todoData = [];
+let data;
 
 if (localStorage.getItem('localData')) {
   todoData = JSON.parse(localStorage.getItem('localData'));
-  
 }
-
-const renderItemForUpdate = function() {
-  if(!todoData.length) {
-    return;
-  }
-  
-  todoData.forEach(function(item) {
-    renderItem(item);
-  });
-}; 
-
 
 const dataUpdateToLocalS = function() {
   localStorage.setItem('localData', JSON.stringify(todoData));
@@ -30,12 +19,12 @@ const dataUpdateToLocalS = function() {
 };
 
 // Function for btn Remove
-const itemRemove = function(elem) {
+const itemRemove = function(elem, index) {
   const item = elem.parentNode.parentNode,
         itemParent = item.parentNode,
         text = item.querySelector('span').textContent;
 
-  todoData.splice(todoData.indexOf(text), 1);
+  todoData.splice(index, 1);
   
   dataUpdateToLocalS();
   itemParent.removeChild(item);  
@@ -46,7 +35,7 @@ const render = function() {
   todoList.textContent = '';
   todoCompleted.textContent = '';
 
-  todoData.forEach(function(item){
+  todoData.forEach(function(item, index){
         
     // Creation new element 
     const li = document.createElement('li');
@@ -76,11 +65,9 @@ const render = function() {
     // Button Remove
     const btnTodoRemove = li.querySelector('.todo-remove');
     btnTodoRemove.addEventListener('click', function(event){
-      itemRemove(event.target);
+      itemRemove(event.target, index);
     
     });
-
-    
   });
 
 }; 
