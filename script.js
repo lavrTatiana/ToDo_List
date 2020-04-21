@@ -9,7 +9,19 @@ let todoData = [];
 
 if (localStorage.getItem('localData')) {
   todoData = JSON.parse(localStorage.getItem('localData'));
+  
 }
+
+const renderItemForUpdate = function() {
+  if(!todoData.length) {
+    return;
+  }
+  
+  todoData.forEach(function(item) {
+    renderItem(item);
+  });
+}; 
+
 
 const dataUpdateToLocalS = function() {
   localStorage.setItem('localData', JSON.stringify(todoData));
@@ -35,45 +47,43 @@ const render = function() {
   todoCompleted.textContent = '';
 
   todoData.forEach(function(item){
-    if (item.value !== '') {
-      
-      // Creation new element 
-      const li = document.createElement('li');
-      li.classList.add('todo-item');
-
-      li.innerHTML = '<span class="text-todo">' + item.value + '</span>' + 
-        '<div class="todo-buttons">' +
-          '<button class="todo-remove"></button>' +
-          '<button class="todo-complete"></button>' +
-        '</div>';
-      
-      // Compare by btn Complete
-      if (item.completed) {
-        todoCompleted.append(li);
-      } else {
-        todoList.append(li);
-      }
-      
-      // Button Complete
-      const btnTodoComplete = li.querySelector('.todo-complete');
-      btnTodoComplete.addEventListener('click', function(){
-        item.completed = !item.completed;
-        render(); 
-        dataUpdateToLocalS();
-      });
-
-      // Button Remove
-      const btnTodoRemove = li.querySelector('.todo-remove');
-      btnTodoRemove.addEventListener('click', function(event){
-        itemRemove(event.target);
-        item.value = '';
         
-      });
+    // Creation new element 
+    const li = document.createElement('li');
+    li.classList.add('todo-item');
 
+    li.innerHTML = '<span class="text-todo">' + item.value + '</span>' + 
+      '<div class="todo-buttons">' +
+        '<button class="todo-remove"></button>' +
+        '<button class="todo-complete"></button>' +
+      '</div>';
+    
+    // Compare by btn Complete
+    if (item.completed) {
+      todoCompleted.append(li);
+    } else {
+      todoList.append(li);
     }
+    
+    // Button Complete
+    const btnTodoComplete = li.querySelector('.todo-complete');
+    btnTodoComplete.addEventListener('click', function(){
+      item.completed = !item.completed;
+      render(); 
+      dataUpdateToLocalS();
+    });
+
+    // Button Remove
+    const btnTodoRemove = li.querySelector('.todo-remove');
+    btnTodoRemove.addEventListener('click', function(event){
+      itemRemove(event.target);
+    
+    });
+
+    
   });
 
-};
+}; 
 
 
 // Reaction btn plus, pushing new element
